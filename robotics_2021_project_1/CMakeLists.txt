@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(.)
+project(robotics_2021_project_1)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -15,6 +15,7 @@ find_package(
     std_msgs
     roscpp
     message_filters
+    robotics_hw1
 )
 
 ## System dependencies are found with CMake's conventions
@@ -51,10 +52,9 @@ find_package(
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-add_message_files(
-  FILES
-    MotorSpeed.msg
-)
+# add_message_files(
+#   FILES
+#)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -71,12 +71,9 @@ add_message_files(
 # )
 
 ## Generate added messages and services with any dependencies listed here
-generate_messages(
-  DEPENDENCIES
-    std_msgs
-    nav_msgs
-    
-)
+# generate_messages(
+#   DEPENDENCIES
+# )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -111,6 +108,7 @@ catkin_package(
   CATKIN_DEPENDS
     std_msgs
     nav_msgs
+    robotics_hw1
     message_runtime
     message_filters
 )
@@ -122,8 +120,8 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-add_executable(sincro src/syncronizer.cpp)
-target_link_libraries(sincro ${catkin_LIBRARIES})
+add_executable(sincronizer src/syncronizer.cpp)
+target_link_libraries(sincronizer ${catkin_LIBRARIES})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -133,7 +131,7 @@ target_link_libraries(sincro ${catkin_LIBRARIES})
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(sincronizer ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context

@@ -1,9 +1,9 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
-#include "robotics_2021_project_1/MotorSpeed.h"
-#include <message_filters/subscriber.h>
-#include <message_filters/time_synchronizer.h>
+#include "message_filters/subscriber.h"
+#include "message_filters/time_synchronizer.h"
 #include "geometry_msgs/TwistStamped.h"
+#include "robotics_hw1/MotorSpeed.h"
 
 
 using namespace message_filters;
@@ -26,12 +26,12 @@ class Nodo_velocita{
         ros::NodeHandle n; 
 
         //definizioni per l'utilizzo dei message filter
-        message_filters::Subscriber<robotics_2021_project_1::MotorSpeed> front_l;
-        message_filters::Subscriber<robotics_2021_project_1::MotorSpeed> front_r;
-        message_filters::Subscriber<robotics_2021_project_1::MotorSpeed> rear_r;
-        message_filters::Subscriber<robotics_2021_project_1::MotorSpeed> rear_l;
+        message_filters::Subscriber<robotics_hw1::MotorSpeed> front_l;
+        message_filters::Subscriber<robotics_hw1::MotorSpeed> front_r;
+        message_filters::Subscriber<robotics_hw1::MotorSpeed> rear_r;
+        message_filters::Subscriber<robotics_hw1::MotorSpeed> rear_l;
         //definizione della politica del filtro
-        typedef message_filters::sync_policies::ExactTime<robotics_2021_project_1::MotorSpeed,robotics_2021_project_1::MotorSpeed,robotics_2021_project_1::MotorSpeed,robotics_2021_project_1::MotorSpeed> MySyncPolicy;
+        typedef message_filters::sync_policies::ExactTime<robotics_hw1::MotorSpeed,robotics_hw1::MotorSpeed,robotics_hw1::MotorSpeed,robotics_hw1::MotorSpeed> MySyncPolicy;
         typedef Synchronizer<MySyncPolicy> Sync;
         //definizione per l'utilizzo di un puntatore dinamico
         boost::shared_ptr<Sync> sync;
@@ -56,8 +56,8 @@ class Nodo_velocita{
         //definizione dei metodi
 
         //callback per il subscriber
-        void speed_callback(const robotics_2021_project_1::MotorSpeed::ConstPtr& f_l, const robotics_2021_project_1::MotorSpeed::ConstPtr& f_r,
-                            const robotics_2021_project_1::MotorSpeed::ConstPtr& r_r,const robotics_2021_project_1::MotorSpeed::ConstPtr& r_l );
+        void speed_callback(const robotics_hw1::MotorSpeed::ConstPtr& f_l, const robotics_hw1::MotorSpeed::ConstPtr& f_r,
+                            const robotics_hw1::MotorSpeed::ConstPtr& r_r,const robotics_hw1::MotorSpeed::ConstPtr& r_l );
         
         private:
         double calcolo_radiantis(double girim); // funzione per il calcolo dei radianti al secondo
@@ -81,8 +81,8 @@ double Nodo_velocita::calcolo_velocita_ruota(double v_f, double v_r){
 }
 
 //callback per il subscriber
-void Nodo_velocita::speed_callback(const robotics_2021_project_1::MotorSpeed::ConstPtr& f_l, const robotics_2021_project_1::MotorSpeed::ConstPtr& f_r,
-                            const robotics_2021_project_1::MotorSpeed::ConstPtr& r_r,const robotics_2021_project_1::MotorSpeed::ConstPtr& r_l ){
+void Nodo_velocita::speed_callback(const robotics_hw1::MotorSpeed::ConstPtr& f_l, const robotics_hw1::MotorSpeed::ConstPtr& f_r,
+                            const robotics_hw1::MotorSpeed::ConstPtr& r_r,const robotics_hw1::MotorSpeed::ConstPtr& r_l ){
     v_right = Nodo_velocita::calcolo_velocita_ruota(f_l->rpm,  r_l->rpm); //calcolo della velocità destra e sinistra
     v_left = Nodo_velocita::calcolo_velocita_ruota(f_r->rpm,  r_r->rpm);
 
