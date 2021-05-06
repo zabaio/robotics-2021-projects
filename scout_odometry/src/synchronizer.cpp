@@ -40,17 +40,15 @@ class Nodo_velocita{
     public:
         //costruttore standard
         Nodo_velocita(){
-            front_l.subscribe(n, "motor_speed_fl", 1);
-            front_r.subscribe(n, "motor_speed_fr", 1);
-            rear_r.subscribe(n, "motor_speed_rr", 1);
-            rear_l.subscribe(n, "motor_speed_rl", 1);
-            pub_velocita =n.advertise<geometry_msgs::TwistStamped>("pub_velocita", 1);
+            front_l.subscribe(n, "/motor_speed_fl", 1);
+            front_r.subscribe(n, "/motor_speed_fr", 1);
+            rear_r.subscribe(n, "/motor_speed_rr", 1);
+            rear_l.subscribe(n, "/motor_speed_rl", 1);
+            pub_velocita =n.advertise<geometry_msgs::TwistStamped>("scout_twist", 1);
 
 
             sync.reset(new Sync(MySyncPolicy(10), front_l, front_r, rear_r, rear_l));
             sync->registerCallback(boost::bind(&Nodo_velocita::speed_callback, this, _1,_2,_3,_4));
-
-           
     }
 
         //definizione dei metodi
@@ -89,9 +87,9 @@ void Nodo_velocita::speed_callback(const robotics_hw1::MotorSpeed::ConstPtr& f_l
     v_x = (v_left + v_right)/2;       //calcolo della velocità lineare in x
     w_z = (-v_left+v_right)/(2*y0);   //calcolo della velocità angolare rispetto a z
 
+    msg.header.stamp = ros::Time::now();
     msg.twist.linear.x = v_x;         //scrittura delle velocità nel messaggio
     msg.twist.angular.z = w_z;
- ROS_INFO ("Velocità x %f, \n angolare in z %f \n\n", v_right, v_left);
        
     pub_velocita.publish(msg);        //publicazione del messaggio
 
@@ -100,12 +98,13 @@ void Nodo_velocita::speed_callback(const robotics_hw1::MotorSpeed::ConstPtr& f_l
 
 int main(int argc, char **argv){
 
-    ros::init(argc, argv, "syncronizer");
+    ros::init(argc, argv, "synchronizer");
 
     Nodo_velocita sub_pub;     //creazione dell'oggetto 
 
+    ROS_INFO("Synchronizer spinning...");
     ros::spin();
 
-return 0;
+    return 0;
 
 }

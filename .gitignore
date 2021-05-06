@@ -1,10 +1,5 @@
-# Ignore everything
-*
-
-# Except our packages
-!robotics_2021_project_1/
-
-# And except github files
-!.gitignore
-!LICENSE
-!README.md
+cmake-build-debug
+.idea
+*.bag
+/CMakeLists.txt
+robotics_hw1

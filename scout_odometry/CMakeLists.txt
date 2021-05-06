@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(robotics_2021_project_1)
+project(scout_odometry)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,14 +8,19 @@ project(robotics_2021_project_1)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(
-  catkin REQUIRED
-  COMPONENTS
-    message_generation
-    nav_msgs
-    std_msgs
-    roscpp
-    message_filters
-    robotics_hw1
+    catkin REQUIRED
+    COMPONENTS
+        roscpp
+        message_generation
+        message_filters
+        nav_msgs
+        std_msgs
+        std_srvs
+        geometry_msgs
+        robotics_hw1
+        dynamic_reconfigure
+        tf2
+        tf2_ros
 )
 
 ## System dependencies are found with CMake's conventions
@@ -52,16 +57,16 @@ find_package(
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#)
+add_message_files(
+    FILES
+        State.msg
+)
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+add_service_files(
+    FILES
+        SetPose.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -71,9 +76,11 @@ find_package(
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-# )
+generate_messages(
+    DEPENDENCIES
+        nav_msgs
+        std_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -90,10 +97,9 @@ find_package(
 ##     and list every .cfg file to be processed
 
 ## Generate dynamic reconfigure parameters in the 'cfg' folder
-# generate_dynamic_reconfigure_options(
-#   cfg/DynReconf1.cfg
-#   cfg/DynReconf2.cfg
-# )
+generate_dynamic_reconfigure_options(
+    cfg/parameters.cfg
+)
 
 ###################################
 ## catkin specific configuration ##
@@ -105,13 +111,18 @@ find_package(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  CATKIN_DEPENDS
-    std_msgs
-    nav_msgs
-    robotics_hw1
-    message_runtime
-    message_filters
+    CATKIN_DEPENDS
+        message_filters
+        nav_msgs
+        std_msgs
+        std_srvs
+        geometry_msgs
+        robotics_hw1
+        dynamic_reconfigure
+        tf2
+        tf2_ros
 )
+
 ###########
 ## Build ##
 ###########
@@ -120,8 +131,13 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-add_executable(sincronizer src/syncronizer.cpp)
-target_link_libraries(sincronizer ${catkin_LIBRARIES})
+add_executable(synchronizer src/synchronizer.cpp)
+target_link_libraries(synchronizer ${catkin_LIBRARIES})
+add_dependencies(synchronizer ${catkin_EXPORTED_TARGETS})
+
+add_executable(integrator src/integrator.cpp)
+target_link_libraries(integrator ${catkin_LIBRARIES})
+add_dependencies(integrator ${PROJECT_NAME}_gencfg ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -131,7 +147,6 @@ target_link_libraries(sincronizer ${catkin_LIBRARIES})
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-add_dependencies(sincronizer ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
