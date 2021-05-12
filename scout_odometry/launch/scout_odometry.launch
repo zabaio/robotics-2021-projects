@@ -1,16 +1,22 @@
 <launch>
-
-
 	<group ns="scout">
-		<param name="initial_pose/x" value="0.0" />
-		<param name="initial_pose/y" value="2.1" />
-		<param name="initial_pose/theta" value="0.0" />
-        <param name= "apparent_baseline" value="0.583" />
+
+		<param name="initial_pose/x" value="0" />
+		<param name="initial_pose/y" value="0" />
+		<param name="initial_pose/theta" value="0" />
+        <param name="apparent_baseline" value="0.992" />
+
 		<node pkg="scout_odometry" type="synchronizer" name="synchronizer" output="screen" />
 
 		<node pkg="scout_odometry" type="integrator" name="integrator" output="screen">
 			<!-- 0 for Euler, 1 for Runge_Kutta -->
 			<param name="integration_method" value="0" />
 		</node>
+
 	</group>
+
+	<!-- Static transform for Bag1.bag -->
+	<!-- <node pkg="tf2_ros" type="static_transform_publisher" name="world_odom_tf"
+    	args="-0.53 0.1 0.32  0 0 0.5311862 0.8472551 world odom" /> -->
+
 </launch>
