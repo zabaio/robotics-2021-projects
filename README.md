@@ -6,7 +6,7 @@ This repository contains the projects for the 2021 Robotics [089013] course held
 - Andrea Lanubile - MSc student, Politecnico di Milano
 - Alessandro Nardi - MSc student, Politecnico di Milano
 
-## Project 1 - scout_odometry
+## Project 1 - AgileX Scout 2.0 odometry
 
 AgileX Scout 2.0 odometry computation with ROS.
 
