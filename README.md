@@ -28,10 +28,10 @@ Now publish synchronized `robotics_hw1/MotorSpeed` messages on topics`/motor_spe
 >  The synchronization filtering policy is ApproximateTime.
 
 - `synchronizer` will read the `MotorSpeeds` and convert them to the linear and angular velocity of the robot.
-- `integrator` will read  linear and angular velocity publish
+- `integrator` will read  linear and angular velocity and publish
     - the `tf` between frame `odom` and frame `scout`
     - an `Odometry` message on topic `/scout/scout_odom`
-    - and a `State` message, containing the `Odometry` and the integration method, on topic `/scout/scout_state`.
+    - a `State` message, containing the `Odometry` and the integration method, on topic `/scout/scout_state`.
 
 #### Features
 
@@ -45,8 +45,8 @@ Now publish synchronized `robotics_hw1/MotorSpeed` messages on topics`/motor_spe
 
 To quickly visualize with `rviz` the computation you can use `scout_odometry/rviz/config.rviz`.
 
-For a simulation run, you can use one of the bags in `scout_odometry/bag/`. They will publish, besides the motor speeds, the ground truth position measured with an Optitrack system, on topic `/gt_pose`.
-You will also need to publish a static transform between `world` and `odom` frames, to take into account the starting position of the robot. For `bag1.bag` you can simply uncomment this line in `scout_odometry.launch`:
+For a simulated run, you can use one of the bags in `scout_odometry/bag/`. They will publish, besides the motor speeds, the ground truth position measured with an Optitrack system on topic `/gt_pose`.
+You will also need to publish a static transform between `world` and `odom` frames, to take into account the starting position of the robot. As an example, for `bag1.bag` you can simply uncomment this line in `scout_odometry.launch`:
 
 	<!-- <node pkg="tf2_ros" type="static_transform_publisher" name="world_odom_tf"
     	args="-0.53 0.1 0.32  0 0 0.5311862 0.8472551 world odom" /> -->
